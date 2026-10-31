@@ -1,0 +1,386 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Redes informáticas</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500&family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&display=swap">
+<style>
+/* Layout: barra fija con menú y glosario; una vista por pantalla (ruteo por #), contenido en una columna de lectura. Paleta heredada del mapa de navegación: verde azulado = secciones, naranja = recorrido sugerido. */
+:root{
+  --bg:#f3f6f6; --surface:#ffffff; --fg:#15262d; --muted:#57696f; --line:#c9d5d7;
+  --accent:#0b7a75; --accent-soft:#dcefed; --route:#c96f1c; --route-soft:#fbead8;
+  --pan:#6a5acd; --lan:#0b7a75; --man:#c96f1c; --wan:#2f6fb0;
+  --ok:#2e7d32; --ok-soft:#e3f2e4; --bad:#b3261e; --bad-soft:#fbe4e2;
+  --display:"Bricolage Grotesque","IBM Plex Sans",system-ui,sans-serif;
+  --sans:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0f1719; --surface:#172226; --fg:#e3ecee; --muted:#9aaeb3; --line:#2f4045;
+  --accent:#4fc3bb; --accent-soft:#16383a; --route:#f0a14f; --route-soft:#3a2a18;
+  --pan:#a99cf2; --lan:#4fc3bb; --man:#f0a14f; --wan:#78aee6;
+  --ok:#7ccf80; --ok-soft:#1d3320; --bad:#f2948d; --bad-soft:#3b1f1d; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0f1719; --surface:#172226; --fg:#e3ecee; --muted:#9aaeb3; --line:#2f4045;
+  --accent:#4fc3bb; --accent-soft:#16383a; --route:#f0a14f; --route-soft:#3a2a18;
+  --pan:#a99cf2; --lan:#4fc3bb; --man:#f0a14f; --wan:#78aee6;
+  --ok:#7ccf80; --ok-soft:#1d3320; --bad:#f2948d; --bad-soft:#3b1f1d; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font-family:var(--sans);font-size:16px;line-height:1.6}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--surface)}
+a{color:var(--accent)}
+:focus-visible{outline:3px solid var(--route);outline-offset:2px}
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--surface);border-bottom:1px solid var(--line)}
+.bar-in{max-width:1000px;margin:0 auto;padding-block:10px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:flex;flex-wrap:wrap;align-items:center;gap:8px 16px}
+.brand{font-family:var(--display);font-weight:800;font-size:18px;text-decoration:none;color:var(--fg);display:flex;align-items:center;gap:8px;margin-right:auto}
+.brand svg{flex:none}
+nav.menu{display:flex;flex-wrap:wrap;gap:4px}
+.btn,nav.menu a{font:500 14px var(--sans);border:1px solid var(--line);background:var(--surface);color:var(--fg);border-radius:6px;padding:6px 12px;text-decoration:none;cursor:pointer;display:inline-flex;align-items:center;gap:6px}
+nav.menu a[aria-current="page"]{background:var(--accent-soft);border-color:var(--accent);color:var(--fg)}
+nav.menu a .dot{width:8px;height:8px;border-radius:50%;background:var(--muted)}
+.btn.primary{background:var(--route);border-color:var(--route);color:#fff;font-weight:600}
+.btn.ghost{background:transparent}
+main{max-width:1000px;margin:0 auto;padding-block:24px 64px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.crumbs{font-size:13px;color:var(--muted);display:flex;flex-wrap:wrap;gap:6px;margin-bottom:16px}
+.crumbs a{color:var(--muted)}
+h1,h2{font-family:var(--display);text-wrap:balance;line-height:1.1}
+h1{font-size:clamp(30px,5.5vw,52px);font-weight:800;margin:0 0 12px}
+h2{font-size:24px;font-weight:600;margin:0 0 10px}
+h3{font-size:17px;margin:0 0 6px}
+p{margin:0;max-width:65ch}
+.lead{font-size:18px;color:var(--muted)}
+.eyebrow{font:500 12px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--route)}
+.stack{display:grid;gap:20px}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px;align-items:start}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:20px;min-width:0}
+.hero{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:28px;align-items:center}
+@media (max-width:760px){.hero{grid-template-columns:1fr}}
+.objs{margin:0;padding-left:20px;display:grid;gap:4px}
+.route-list{display:grid;gap:10px;margin:0;padding:0;list-style:none}
+.route-list a{display:flex;align-items:center;gap:12px;padding:12px 14px;border:1px solid var(--line);border-radius:8px;background:var(--surface);text-decoration:none;color:var(--fg)}
+.route-list a:hover{border-color:var(--accent)}
+.num{flex:none;width:28px;height:28px;border-radius:50%;background:var(--route);color:#fff;font:600 14px var(--mono);display:grid;place-items:center}
+.route-list small{display:block;color:var(--muted);font-size:13px}
+.pill{font:500 11px var(--mono);letter-spacing:.04em;text-transform:uppercase;padding:2px 8px;border-radius:999px;margin-left:auto;flex:none}
+.pill.ok{background:var(--ok-soft);color:var(--ok)}
+.pill.wip{background:var(--route-soft);color:var(--route)}
+.diagram{overflow-x:auto}
+.diagram svg{display:block;width:100%;height:auto;min-width:300px}
+.ring{cursor:pointer;transition:opacity .2s}
+.ring:hover,.ring:focus{opacity:.85}
+.ring text{pointer-events:none}
+.info{border-left:4px solid var(--accent);padding:14px 16px;background:var(--surface);border-radius:0 8px 8px 0}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{font:500 13px var(--mono);padding:4px 10px;border-radius:6px;border:2px solid;background:var(--surface);color:var(--fg);cursor:pointer}
+.chip[aria-pressed="true"]{color:#fff}
+.pager{display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px;margin-top:28px;padding-top:20px;border-top:1px solid var(--line)}
+.sub-links{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
+.sub-links a{display:block;padding:14px;border:1px dashed var(--accent);border-radius:8px;text-decoration:none;color:var(--fg);background:var(--surface)}
+.sub-links a small{display:block;color:var(--muted)}
+table{border-collapse:collapse;width:100%;font-size:15px}
+.tbl{overflow-x:auto}
+th,td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-family:var(--mono);font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.case{display:grid;gap:8px;padding:14px;border:1px solid var(--line);border-radius:8px;background:var(--surface)}
+.case .opts{display:flex;gap:8px;flex-wrap:wrap}
+.case.right{border-color:var(--ok);background:var(--ok-soft)}
+.case.wrong{border-color:var(--bad);background:var(--bad-soft)}
+.fb{font-size:14px}
+.wip-box{border:2px dashed var(--route);border-radius:10px;padding:24px;background:var(--route-soft);display:grid;gap:10px}
+.wip-box ul{margin:0;padding-left:20px}
+.gloss{position:fixed;top:0;right:0;bottom:0;width:min(380px,100%);background:var(--surface);border-left:1px solid var(--line);z-index:20;padding:calc(20px + env(safe-area-inset-top,0px)) max(20px,env(safe-area-inset-right,0px)) calc(20px + env(safe-area-inset-bottom,0px)) 20px;overflow-y:auto;box-shadow:-12px 0 30px rgba(0,0,0,.15)}
+.gloss dl{margin:16px 0 0;display:grid;gap:12px}
+.gloss dt{font-weight:600}
+.gloss dd{margin:0;color:var(--muted);font-size:15px}
+.gloss-head{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.term{border-bottom:1px dotted var(--accent);cursor:help;background:none;border-top:0;border-left:0;border-right:0;padding:0;font:inherit;color:inherit}
+.note{font-size:13px;color:var(--muted)}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+
+<header class="bar">
+  <div class="bar-in">
+    <a class="brand" href="#inicio" aria-label="Inicio">
+      <svg width="26" height="26" viewBox="0 0 26 26" aria-hidden="true"><circle cx="13" cy="5" r="3.5" fill="var(--accent)"/><circle cx="5" cy="20" r="3.5" fill="var(--route)"/><circle cx="21" cy="20" r="3.5" fill="var(--accent)"/><path d="M13 8.5L6.5 17M13 8.5L19.5 17M8.5 20H17.5" stroke="var(--muted)" stroke-width="1.6"/></svg>
+      Redes informáticas
+    </a>
+    <nav class="menu" aria-label="Secciones">
+      <a href="#inicio" data-nav="inicio"><span class="dot"></span>Inicio</a>
+      <a href="#red" data-nav="red"><span class="dot" style="background:var(--accent)"></span>1 · ¿Qué es una red?</a>
+      <a href="#dispositivos" data-nav="dispositivos"><span class="dot"></span>2 · Dispositivos</a>
+      <a href="#ip" data-nav="ip"><span class="dot"></span>3 · Direcciones IP</a>
+    </nav>
+    <button class="btn ghost" id="btn-gloss" type="button" aria-expanded="false" aria-controls="gloss">Glosario</button>
+  </div>
+</header>
+
+<main id="main">
+
+<!-- ============ INICIO ============ -->
+<section data-view="inicio" class="stack">
+  <div class="hero">
+    <div class="stack" style="gap:14px">
+      <span class="eyebrow">Recurso hipermedial · Secundaria</span>
+      <h1>¿Cómo llega un mensaje de tu celular al de un amigo?</h1>
+      <p class="lead">Cada vez que mandás un audio, mirás un video o entrás al aula virtual, usás una red. En este recorrido vas a descubrir qué es una red, qué equipos la hacen funcionar y cómo se identifica cada dispositivo.</p>
+      <div style="display:flex;flex-wrap:wrap;gap:10px;margin-top:6px">
+        <a class="btn primary" href="#red">Comenzar recorrido →</a>
+        <button class="btn" type="button" data-open-gloss>Abrir glosario</button>
+      </div>
+    </div>
+    <div class="panel diagram" aria-label="Ilustración de un mensaje viajando por la red">
+      <svg viewBox="0 0 400 260" role="img" aria-label="Un celular envía un mensaje que pasa por el router de la casa, sale a Internet y llega al celular de otra persona.">
+        <rect x="14" y="80" width="56" height="100" rx="10" fill="var(--accent-soft)" stroke="var(--accent)" stroke-width="2"/>
+        <rect x="24" y="96" width="36" height="58" rx="3" fill="var(--surface)" stroke="var(--accent)"/>
+        <text x="42" y="200" text-anchor="middle" font-family="IBM Plex Sans" font-size="12" fill="var(--fg)">Tu celular</text>
+        <rect x="108" y="112" width="70" height="34" rx="6" fill="var(--surface)" stroke="var(--route)" stroke-width="2"/>
+        <path d="M122 112V96M164 112V96" stroke="var(--route)" stroke-width="2"/>
+        <circle cx="128" cy="129" r="3" fill="var(--route)"/><circle cx="140" cy="129" r="3" fill="var(--route)"/>
+        <text x="143" y="168" text-anchor="middle" font-family="IBM Plex Sans" font-size="12" fill="var(--fg)">Router</text>
+        <ellipse cx="258" cy="128" rx="58" ry="40" fill="var(--surface)" stroke="var(--wan)" stroke-width="2"/>
+        <text x="258" y="133" text-anchor="middle" font-family="IBM Plex Sans" font-weight="600" font-size="14" fill="var(--wan)">Internet</text>
+        <rect x="330" y="80" width="56" height="100" rx="10" fill="var(--accent-soft)" stroke="var(--accent)" stroke-width="2"/>
+        <rect x="340" y="96" width="36" height="58" rx="3" fill="var(--surface)" stroke="var(--accent)"/>
+        <text x="358" y="200" text-anchor="middle" font-family="IBM Plex Sans" font-size="12" fill="var(--fg)">Tu amigo</text>
+        <path id="msgpath" d="M70 130H108M178 130H200M316 130H330" stroke="var(--line)" stroke-width="3" stroke-dasharray="5 5" fill="none"/>
+        <circle r="7" fill="var(--route)"><animateMotion dur="3.2s" repeatCount="indefinite" path="M42 125H143H258H358"/></circle>
+        <text x="200" y="240" text-anchor="middle" font-family="IBM Plex Mono" font-size="11" fill="var(--muted)">PAN · LAN · WAN — en menos de un segundo</text>
+      </svg>
+    </div>
+  </div>
+
+  <div class="grid2">
+    <div class="panel">
+      <h2>Qué vas a aprender</h2>
+      <ul class="objs">
+        <li>Reconocer qué es una red y distinguir PAN, LAN, MAN y WAN según su alcance.</li>
+        <li>Identificar la función del router, el switch y el punto de acceso.</li>
+        <li>Interpretar una dirección IPv4 y encontrar la de tu propio equipo.</li>
+      </ul>
+    </div>
+    <div class="panel">
+      <h2>Tu recorrido</h2>
+      <ol class="route-list">
+        <li><a href="#red"><span class="num">1</span><span>¿Qué es una red?<small>Tipos de red según su alcance</small></span><span class="pill ok">Disponible</span></a></li>
+        <li><a href="#dispositivos"><span class="num">2</span><span>Dispositivos de red<small>Router, switch, access point</small></span><span class="pill wip">En construcción</span></a></li>
+        <li><a href="#ip"><span class="num">3</span><span>Direcciones IP<small>IPv4, máscara, puerta de enlace</small></span><span class="pill wip">En construcción</span></a></li>
+        <li><a href="#autoevaluacion"><span class="num">4</span><span>Autoevaluación<small>Cuestionario con retroalimentación</small></span><span class="pill wip">En construcción</span></a></li>
+      </ol>
+    </div>
+  </div>
+  <p class="note">Podés seguir el orden sugerido o saltar a cualquier sección desde el menú. El glosario está siempre arriba a la derecha.</p>
+</section>
+
+<!-- ============ SECCIÓN 1 ============ -->
+<section data-view="red" class="stack" hidden>
+  <nav class="crumbs" aria-label="Ubicación"><a href="#inicio">Inicio</a> › <span>1 · ¿Qué es una red?</span></nav>
+  <span class="eyebrow">Sección 1 de 3</span>
+  <h1>¿Qué es una red?</h1>
+  <p class="lead">Una red es un conjunto de dispositivos conectados que comparten información y recursos. Lo que cambia de una red a otra es <b>hasta dónde llega</b>: puede ser tan chica como tu celular y tus auriculares, o tan grande como todo el planeta.</p>
+
+  <div class="grid2">
+    <div class="panel diagram">
+      <svg id="rings" viewBox="0 0 420 420" role="group" aria-label="Círculos de alcance: PAN dentro de LAN, LAN dentro de MAN, MAN dentro de WAN. Tocá cada círculo.">
+        <g class="ring" data-k="wan" tabindex="0" role="button" aria-label="WAN"><circle cx="210" cy="210" r="200" fill="var(--wan)" fill-opacity=".14" stroke="var(--wan)" stroke-width="2"/><text x="210" y="40" text-anchor="middle" font-family="IBM Plex Mono" font-weight="500" font-size="16" fill="var(--wan)">WAN · el mundo</text></g>
+        <g class="ring" data-k="man" tabindex="0" role="button" aria-label="MAN"><circle cx="210" cy="230" r="145" fill="var(--man)" fill-opacity=".16" stroke="var(--man)" stroke-width="2"/><text x="210" y="112" text-anchor="middle" font-family="IBM Plex Mono" font-weight="500" font-size="15" fill="var(--man)">MAN · la ciudad</text></g>
+        <g class="ring" data-k="lan" tabindex="0" role="button" aria-label="LAN"><circle cx="210" cy="255" r="92" fill="var(--lan)" fill-opacity=".18" stroke="var(--lan)" stroke-width="2"/><text x="210" y="190" text-anchor="middle" font-family="IBM Plex Mono" font-weight="500" font-size="14" fill="var(--lan)">LAN · la escuela</text></g>
+        <g class="ring" data-k="pan" tabindex="0" role="button" aria-label="PAN"><circle cx="210" cy="275" r="44" fill="var(--pan)" fill-opacity=".22" stroke="var(--pan)" stroke-width="2"/><text x="210" y="272" text-anchor="middle" font-family="IBM Plex Mono" font-weight="500" font-size="14" fill="var(--pan)">PAN</text><text x="210" y="290" text-anchor="middle" font-family="IBM Plex Sans" font-size="11" fill="var(--fg)">vos</text></g>
+      </svg>
+      <p class="note" style="text-align:center;margin:8px auto 0">Tocá un círculo para ver qué tipo de red es.</p>
+    </div>
+
+    <div class="stack" style="gap:14px">
+      <div class="chips" role="group" aria-label="Elegí un tipo de red">
+        <button class="chip" type="button" data-k="pan" style="border-color:var(--pan)">PAN</button>
+        <button class="chip" type="button" data-k="lan" style="border-color:var(--lan)">LAN</button>
+        <button class="chip" type="button" data-k="man" style="border-color:var(--man)">MAN</button>
+        <button class="chip" type="button" data-k="wan" style="border-color:var(--wan)">WAN</button>
+      </div>
+      <div class="info" id="ring-info" aria-live="polite">
+        <h3 id="ri-title">Empezá por el centro</h3>
+        <p id="ri-body">Cada círculo contiene al anterior: tu red personal (PAN) está dentro de la red de la escuela (LAN), que forma parte de la red de la ciudad (MAN), que a su vez se conecta con el mundo (WAN).</p>
+      </div>
+    </div>
+  </div>
+
+  <div>
+    <h2>Para profundizar</h2>
+    <div class="sub-links">
+      <a href="#comparar"><b>Comparar: LAN vs WAN</b><small>Clasificá situaciones reales y recibí una devolución</small></a>
+      <a href="#video"><b>Video: cómo viaja un mensaje</b><small>En construcción</small></a>
+    </div>
+  </div>
+
+  <div class="pager">
+    <a class="btn" href="#inicio">← Volver al inicio</a>
+    <a class="btn primary" href="#dispositivos">Siguiente: Dispositivos de red →</a>
+  </div>
+</section>
+
+<!-- ============ SUBPÁGINA: COMPARAR ============ -->
+<section data-view="comparar" class="stack" hidden>
+  <nav class="crumbs" aria-label="Ubicación"><a href="#inicio">Inicio</a> › <a href="#red">1 · ¿Qué es una red?</a> › <span>Comparar LAN vs WAN</span></nav>
+  <span class="eyebrow">Ampliación · Sección 1</span>
+  <h1>LAN o WAN: ¿cuál es cuál?</h1>
+  <div class="tbl panel" style="padding:4px 8px">
+    <table>
+      <thead><tr><th></th><th>LAN</th><th>WAN</th></tr></thead>
+      <tbody>
+        <tr><td><b>Alcance</b></td><td>Un edificio: casa, aula, laboratorio</td><td>Ciudades, países, todo el mundo</td></tr>
+        <tr><td><b>Quién la administra</b></td><td>La escuela, la familia, una empresa</td><td>Proveedores de Internet y empresas de telecomunicaciones</td></tr>
+        <tr><td><b>Cómo se conecta</b></td><td>Cable UTP y Wi-Fi</td><td>Fibra óptica, enlaces satelitales y de radio</td></tr>
+        <tr><td><b>Ejemplo cercano</b></td><td>Las compus del laboratorio de informática</td><td>Internet</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2>Ponete a prueba</h2>
+  <p>Leé cada situación y elegí si se trata de una LAN o de una WAN.</p>
+  <div class="grid2" id="cases"></div>
+  <div style="display:flex;flex-wrap:wrap;align-items:center;gap:12px"><p class="fb" id="score" aria-live="polite"></p><button class="btn" type="button" id="retry">Reintentar</button></div>
+
+  <div class="pager">
+    <a class="btn" href="#red">← Volver a la sección</a>
+    <a class="btn ghost" href="#inicio">Inicio</a>
+  </div>
+</section>
+
+<!-- ============ PENDIENTES ============ -->
+<section data-view="video" class="stack" hidden>
+  <nav class="crumbs" aria-label="Ubicación"><a href="#inicio">Inicio</a> › <a href="#red">1 · ¿Qué es una red?</a> › <span>Video</span></nav>
+  <h1>Video: cómo viaja un mensaje</h1>
+  <div class="wip-box">
+    <span class="eyebrow">En construcción · próxima entrega</span>
+    <p>Video corto (2 a 3 minutos) con subtítulos. Guion previsto:</p>
+    <ul><li>Un estudiante manda un audio por WhatsApp desde el aula.</li><li>El audio pasa del celular al punto de acceso de la escuela (LAN).</li><li>Sale a Internet (WAN) y llega al celular de un amigo en otra ciudad.</li></ul>
+  </div>
+  <div class="pager"><a class="btn" href="#red">← Volver a la sección</a><a class="btn ghost" href="#inicio">Inicio</a></div>
+</section>
+
+<section data-view="dispositivos" class="stack" hidden>
+  <nav class="crumbs" aria-label="Ubicación"><a href="#inicio">Inicio</a> › <span>2 · Dispositivos de red</span></nav>
+  <span class="eyebrow">Sección 2 de 3</span>
+  <h1>Dispositivos de red</h1>
+  <div class="wip-box">
+    <span class="eyebrow">En construcción · próxima entrega</span>
+    <p>Esta sección presentará el router, el switch y el punto de acceso. Incluirá:</p>
+    <ul><li><b>Galería:</b> fotos de equipos reales del laboratorio de la escuela.</li><li><b>Simulador «Armá tu red»:</b> arrastrar dispositivos para conectar un aula a Internet.</li></ul>
+  </div>
+  <div class="pager"><a class="btn" href="#red">← Anterior: ¿Qué es una red?</a><a class="btn primary" href="#ip">Siguiente: Direcciones IP →</a></div>
+</section>
+
+<section data-view="ip" class="stack" hidden>
+  <nav class="crumbs" aria-label="Ubicación"><a href="#inicio">Inicio</a> › <span>3 · Direcciones IP</span></nav>
+  <span class="eyebrow">Sección 3 de 3</span>
+  <h1>Direcciones IP</h1>
+  <div class="wip-box">
+    <span class="eyebrow">En construcción · próxima entrega</span>
+    <p>Esta sección explicará IPv4, máscara y puerta de enlace. Incluirá:</p>
+    <ul><li><b>Infografía:</b> las partes de una dirección como <code>192.168.1.15</code>.</li><li><b>Práctica:</b> encontrar la IP del propio equipo con <code>ipconfig</code> (Windows) o en los ajustes del celular.</li></ul>
+  </div>
+  <div class="pager"><a class="btn" href="#dispositivos">← Anterior: Dispositivos</a><a class="btn primary" href="#autoevaluacion">Ir a la autoevaluación →</a></div>
+</section>
+
+<section data-view="autoevaluacion" class="stack" hidden>
+  <nav class="crumbs" aria-label="Ubicación"><a href="#inicio">Inicio</a> › <span>Autoevaluación</span></nav>
+  <h1>Autoevaluación</h1>
+  <div class="wip-box">
+    <span class="eyebrow">En construcción · próxima entrega</span>
+    <p>Cuestionario de 8 a 10 preguntas sobre las tres secciones, con devolución inmediata en cada respuesta y opción de reintentar.</p>
+  </div>
+  <div class="pager"><a class="btn" href="#ip">← Volver a Direcciones IP</a><a class="btn ghost" href="#inicio">Volver al inicio</a></div>
+</section>
+
+</main>
+
+<aside class="gloss" id="gloss" hidden aria-label="Glosario">
+  <div class="gloss-head"><h2 style="margin:0">Glosario</h2><button class="btn" type="button" id="gloss-close">Cerrar</button></div>
+  <p class="note">Se abre sin salir de la página donde estás.</p>
+  <dl>
+    <dt>Red</dt><dd>Conjunto de dispositivos conectados que comparten información y recursos.</dd>
+    <dt>PAN</dt><dd>Red de área personal. Conecta dispositivos de una sola persona a pocos metros, por ejemplo con Bluetooth.</dd>
+    <dt>LAN</dt><dd>Red de área local. Conecta equipos dentro de un mismo edificio.</dd>
+    <dt>MAN</dt><dd>Red de área metropolitana. Une varios edificios dentro de una ciudad.</dd>
+    <dt>WAN</dt><dd>Red de área amplia. Conecta redes entre ciudades y países. Internet es la WAN más grande.</dd>
+    <dt>Router</dt><dd>Equipo que conecta una red con otra, por ejemplo la red de tu casa con Internet.</dd>
+    <dt>Switch</dt><dd>Equipo que conecta por cable varios dispositivos de una misma LAN.</dd>
+    <dt>Punto de acceso</dt><dd>Equipo que permite conectarse a una red por Wi-Fi.</dd>
+    <dt>Dirección IP</dt><dd>Número que identifica a cada dispositivo dentro de una red.</dd>
+  </dl>
+</aside>
+
+<script>
+(function(){
+  var VIEWS=["inicio","red","comparar","video","dispositivos","ip","autoevaluacion"];
+  var NAV={inicio:"inicio",red:"red",comparar:"red",video:"red",dispositivos:"dispositivos",ip:"ip",autoevaluacion:"inicio"};
+  function show(){
+    var v=(location.hash||"").slice(1); if(VIEWS.indexOf(v)<0) v="inicio";
+    document.querySelectorAll("[data-view]").forEach(function(s){s.hidden=s.dataset.view!==v});
+    document.querySelectorAll("[data-nav]").forEach(function(a){
+      if(a.dataset.nav===NAV[v]) a.setAttribute("aria-current","page"); else a.removeAttribute("aria-current");
+    });
+    window.scrollTo(0,0);
+  }
+  window.addEventListener("hashchange",show); show();
+
+  // Glosario
+  var g=document.getElementById("gloss"), gb=document.getElementById("btn-gloss");
+  function setG(open){g.hidden=!open; gb.setAttribute("aria-expanded",open)}
+  gb.onclick=function(){setG(g.hidden)};
+  document.getElementById("gloss-close").onclick=function(){setG(false);gb.focus()};
+  document.querySelectorAll("[data-open-gloss]").forEach(function(b){b.onclick=function(){setG(true)}});
+  document.addEventListener("keydown",function(e){if(e.key==="Escape"&&!g.hidden)setG(false)});
+
+  // Círculos de alcance
+  var INFO={
+    pan:["PAN · Red de área personal","Conecta los dispositivos de una sola persona a pocos metros. Ejemplo: tu celular con los auriculares Bluetooth o con el reloj inteligente."],
+    lan:["LAN · Red de área local","Conecta los equipos de un mismo edificio. Ejemplo: las computadoras del laboratorio de la escuela, unidas por cable y Wi-Fi."],
+    man:["MAN · Red de área metropolitana","Une varios edificios dentro de una ciudad. Ejemplo: una red que conecta las escuelas y oficinas municipales de Corrientes."],
+    wan:["WAN · Red de área amplia","Conecta redes de distintas ciudades y países. Ejemplo: Internet, que te permite ver un video subido desde Japón."]
+  };
+  function pick(k){
+    document.getElementById("ri-title").textContent=INFO[k][0];
+    document.getElementById("ri-body").textContent=INFO[k][1];
+    document.getElementById("ring-info").style.borderLeftColor="var(--"+k+")";
+    document.querySelectorAll(".chip").forEach(function(c){
+      var on=c.dataset.k===k; c.setAttribute("aria-pressed",on); c.style.background=on?"var(--"+k+")":"";
+    });
+  }
+  document.querySelectorAll(".ring,.chip").forEach(function(el){
+    el.addEventListener("click",function(){pick(el.dataset.k)});
+    el.addEventListener("keydown",function(e){if(e.key==="Enter"||e.key===" "){e.preventDefault();pick(el.dataset.k)}});
+  });
+
+  // Actividad LAN o WAN
+  var CASES=[
+    ["Las 20 computadoras del laboratorio comparten una impresora.","LAN","Todo ocurre dentro de un mismo edificio."],
+    ["Hacés una videollamada con tu prima que vive en Córdoba.","WAN","La comunicación cruza ciudades a través de Internet."],
+    ["En tu casa, el celular y la tele se conectan al mismo Wi-Fi.","LAN","Es la red local de tu casa."],
+    ["Un banco conecta sus sucursales de todo el país.","WAN","Une edificios de distintas provincias."]
+  ];
+  var wrap=document.getElementById("cases"), done=0, right=0;
+  function build(){ wrap.innerHTML=""; done=0; right=0; document.getElementById("score").textContent="";
+  CASES.forEach(function(c,i){
+    var d=document.createElement("div"); d.className="case";
+    d.innerHTML='<p>'+c[0]+'</p><div class="opts"><button class="btn" type="button" id="c'+i+'l">LAN</button><button class="btn" type="button" id="c'+i+'w">WAN</button></div><p class="fb" aria-live="polite"></p>';
+    wrap.appendChild(d);
+    d.querySelectorAll("button").forEach(function(b){
+      b.onclick=function(){
+        if(d.dataset.done) return; d.dataset.done=1; done++;
+        var ok=b.textContent===c[1]; if(ok) right++;
+        d.classList.add(ok?"right":"wrong");
+        d.querySelector(".fb").textContent=(ok?"¡Correcto! ":"Era "+c[1]+". ")+c[2];
+        if(done===CASES.length) document.getElementById("score").textContent="Acertaste "+right+" de "+CASES.length+". "+(right===CASES.length?"Muy bien, ya podés seguir con la sección 2.":"Volvé a mirar los círculos de alcance y probá de nuevo con «Reintentar».");
+      };
+    });
+  });
+  }
+  build(); document.getElementById("retry").onclick=build;
+})();
+</script>
+
+</body>
+</html>
