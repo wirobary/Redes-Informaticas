@@ -4,8 +4,13 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Redes informáticas</title>
+<meta name="version" content="1.1 · 2026-11-10">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500&family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&display=swap">
 <style>
+/* Base: oculta las vistas inactivas y reinicia márgenes */
+[hidden]{display:none!important}
+body{margin:0}
+img{max-width:100%}
 /* Layout: barra fija con menú y glosario; una vista por pantalla (ruteo por #), contenido en una columna de lectura. Paleta heredada del mapa de navegación: verde azulado = secciones, naranja = recorrido sugerido. */
 :root{
   --bg:#f3f6f6; --surface:#ffffff; --fg:#15262d; --muted:#57696f; --line:#c9d5d7;
@@ -123,7 +128,7 @@ th{font-family:var(--mono);font-size:12px;letter-spacing:.06em;text-transform:up
 <section data-view="inicio" class="stack">
   <div class="hero">
     <div class="stack" style="gap:14px">
-      <span class="eyebrow">Recurso hipermedial · Secundaria</span>
+      <span class="eyebrow">Pregunta guía del recorrido</span>
       <h1>¿Cómo llega un mensaje de tu celular al de un amigo?</h1>
       <p class="lead">Cada vez que mandás un audio, mirás un video o entrás al aula virtual, usás una red. En este recorrido vas a descubrir qué es una red, qué equipos la hacen funcionar y cómo se identifica cada dispositivo.</p>
       <div style="display:flex;flex-wrap:wrap;gap:10px;margin-top:6px">
@@ -135,19 +140,19 @@ th{font-family:var(--mono);font-size:12px;letter-spacing:.06em;text-transform:up
       <svg viewBox="0 0 400 260" role="img" aria-label="Un celular envía un mensaje que pasa por el router de la casa, sale a Internet y llega al celular de otra persona.">
         <rect x="14" y="80" width="56" height="100" rx="10" fill="var(--accent-soft)" stroke="var(--accent)" stroke-width="2"/>
         <rect x="24" y="96" width="36" height="58" rx="3" fill="var(--surface)" stroke="var(--accent)"/>
-        <text x="42" y="200" text-anchor="middle" font-family="IBM Plex Sans" font-size="12" fill="var(--fg)">Tu celular</text>
+        <text x="42" y="200" text-anchor="middle" font-family="IBM Plex Sans, Arial, sans-serif" font-size="12" fill="var(--fg)">Tu celular</text>
         <rect x="108" y="112" width="70" height="34" rx="6" fill="var(--surface)" stroke="var(--route)" stroke-width="2"/>
         <path d="M122 112V96M164 112V96" stroke="var(--route)" stroke-width="2"/>
         <circle cx="128" cy="129" r="3" fill="var(--route)"/><circle cx="140" cy="129" r="3" fill="var(--route)"/>
-        <text x="143" y="168" text-anchor="middle" font-family="IBM Plex Sans" font-size="12" fill="var(--fg)">Router</text>
+        <text x="143" y="168" text-anchor="middle" font-family="IBM Plex Sans, Arial, sans-serif" font-size="12" fill="var(--fg)">Router</text>
         <ellipse cx="258" cy="128" rx="58" ry="40" fill="var(--surface)" stroke="var(--wan)" stroke-width="2"/>
-        <text x="258" y="133" text-anchor="middle" font-family="IBM Plex Sans" font-weight="600" font-size="14" fill="var(--wan)">Internet</text>
+        <text x="258" y="133" text-anchor="middle" font-family="IBM Plex Sans, Arial, sans-serif" font-weight="600" font-size="14" fill="var(--wan)">Internet</text>
         <rect x="330" y="80" width="56" height="100" rx="10" fill="var(--accent-soft)" stroke="var(--accent)" stroke-width="2"/>
         <rect x="340" y="96" width="36" height="58" rx="3" fill="var(--surface)" stroke="var(--accent)"/>
-        <text x="358" y="200" text-anchor="middle" font-family="IBM Plex Sans" font-size="12" fill="var(--fg)">Tu amigo</text>
+        <text x="358" y="200" text-anchor="middle" font-family="IBM Plex Sans, Arial, sans-serif" font-size="12" fill="var(--fg)">Tu amigo</text>
         <path id="msgpath" d="M70 130H108M178 130H200M316 130H330" stroke="var(--line)" stroke-width="3" stroke-dasharray="5 5" fill="none"/>
         <circle r="7" fill="var(--route)"><animateMotion dur="3.2s" repeatCount="indefinite" path="M42 125H143H258H358"/></circle>
-        <text x="200" y="240" text-anchor="middle" font-family="IBM Plex Mono" font-size="11" fill="var(--muted)">PAN · LAN · WAN — en menos de un segundo</text>
+        <text x="200" y="240" text-anchor="middle" font-family="IBM Plex Mono, Consolas, monospace" font-size="11" fill="var(--muted)">PAN · LAN · WAN — en menos de un segundo</text>
       </svg>
     </div>
   </div>
@@ -184,10 +189,10 @@ th{font-family:var(--mono);font-size:12px;letter-spacing:.06em;text-transform:up
   <div class="grid2">
     <div class="panel diagram">
       <svg id="rings" viewBox="0 0 420 420" role="group" aria-label="Círculos de alcance: PAN dentro de LAN, LAN dentro de MAN, MAN dentro de WAN. Tocá cada círculo.">
-        <g class="ring" data-k="wan" tabindex="0" role="button" aria-label="WAN"><circle cx="210" cy="210" r="200" fill="var(--wan)" fill-opacity=".14" stroke="var(--wan)" stroke-width="2"/><text x="210" y="40" text-anchor="middle" font-family="IBM Plex Mono" font-weight="500" font-size="16" fill="var(--wan)">WAN · el mundo</text></g>
-        <g class="ring" data-k="man" tabindex="0" role="button" aria-label="MAN"><circle cx="210" cy="230" r="145" fill="var(--man)" fill-opacity=".16" stroke="var(--man)" stroke-width="2"/><text x="210" y="112" text-anchor="middle" font-family="IBM Plex Mono" font-weight="500" font-size="15" fill="var(--man)">MAN · la ciudad</text></g>
-        <g class="ring" data-k="lan" tabindex="0" role="button" aria-label="LAN"><circle cx="210" cy="255" r="92" fill="var(--lan)" fill-opacity=".18" stroke="var(--lan)" stroke-width="2"/><text x="210" y="190" text-anchor="middle" font-family="IBM Plex Mono" font-weight="500" font-size="14" fill="var(--lan)">LAN · la escuela</text></g>
-        <g class="ring" data-k="pan" tabindex="0" role="button" aria-label="PAN"><circle cx="210" cy="275" r="44" fill="var(--pan)" fill-opacity=".22" stroke="var(--pan)" stroke-width="2"/><text x="210" y="272" text-anchor="middle" font-family="IBM Plex Mono" font-weight="500" font-size="14" fill="var(--pan)">PAN</text><text x="210" y="290" text-anchor="middle" font-family="IBM Plex Sans" font-size="11" fill="var(--fg)">vos</text></g>
+        <g class="ring" data-k="wan" tabindex="0" role="button" aria-label="WAN"><circle cx="210" cy="210" r="200" fill="var(--wan)" fill-opacity=".14" stroke="var(--wan)" stroke-width="2"/><text x="210" y="40" text-anchor="middle" font-family="IBM Plex Mono, Consolas, monospace" font-weight="500" font-size="16" fill="var(--wan)">WAN · el mundo</text></g>
+        <g class="ring" data-k="man" tabindex="0" role="button" aria-label="MAN"><circle cx="210" cy="230" r="145" fill="var(--man)" fill-opacity=".16" stroke="var(--man)" stroke-width="2"/><text x="210" y="112" text-anchor="middle" font-family="IBM Plex Mono, Consolas, monospace" font-weight="500" font-size="15" fill="var(--man)">MAN · la ciudad</text></g>
+        <g class="ring" data-k="lan" tabindex="0" role="button" aria-label="LAN"><circle cx="210" cy="255" r="92" fill="var(--lan)" fill-opacity=".18" stroke="var(--lan)" stroke-width="2"/><text x="210" y="190" text-anchor="middle" font-family="IBM Plex Mono, Consolas, monospace" font-weight="500" font-size="14" fill="var(--lan)">LAN · la escuela</text></g>
+        <g class="ring" data-k="pan" tabindex="0" role="button" aria-label="PAN"><circle cx="210" cy="275" r="44" fill="var(--pan)" fill-opacity=".22" stroke="var(--pan)" stroke-width="2"/><text x="210" y="272" text-anchor="middle" font-family="IBM Plex Mono, Consolas, monospace" font-weight="500" font-size="14" fill="var(--pan)">PAN</text><text x="210" y="290" text-anchor="middle" font-family="IBM Plex Sans, Arial, sans-serif" font-size="11" fill="var(--fg)">vos</text></g>
       </svg>
       <p class="note" style="text-align:center;margin:8px auto 0">Tocá un círculo para ver qué tipo de red es.</p>
     </div>
@@ -204,6 +209,12 @@ th{font-family:var(--mono);font-size:12px;letter-spacing:.06em;text-transform:up
         <p id="ri-body">Cada círculo contiene al anterior: tu red personal (PAN) está dentro de la red de la escuela (LAN), que forma parte de la red de la ciudad (MAN), que a su vez se conecta con el mundo (WAN).</p>
       </div>
     </div>
+  </div>
+
+  <div class="info" style="border-left-color:var(--route)">
+    <span class="eyebrow">Volvé a la pregunta guía</span>
+    <h3 style="margin-top:6px">¿Cómo llega un mensaje de tu celular al de un amigo?</h3>
+    <p>Con lo que viste, pensá: cuando mandás un audio desde el aula a un amigo que vive en otra ciudad, ¿por qué tipos de red pasa ese mensaje y en qué orden? Anotá tu respuesta: la vas a completar en las próximas secciones.</p>
   </div>
 
   <div>
