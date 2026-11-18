@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Redes informáticas</title>
-<meta name="version" content="1.1 · 2026-11-10">
+<meta name="version" content="2.0 · 2026-11-13">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500&family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&display=swap">
 <style>
 /* Base: oculta las vistas inactivas y reinicia márgenes */
@@ -14,8 +14,8 @@ img{max-width:100%}
 /* Layout: barra fija con menú y glosario; una vista por pantalla (ruteo por #), contenido en una columna de lectura. Paleta heredada del mapa de navegación: verde azulado = secciones, naranja = recorrido sugerido. */
 :root{
   --bg:#f3f6f6; --surface:#ffffff; --fg:#15262d; --muted:#57696f; --line:#c9d5d7;
-  --accent:#0b7a75; --accent-soft:#dcefed; --route:#c96f1c; --route-soft:#fbead8;
-  --pan:#6a5acd; --lan:#0b7a75; --man:#c96f1c; --wan:#2f6fb0;
+  --accent:#0b7a75; --accent-soft:#dcefed; --route:#a8560f; --route-soft:#fdf0e3; --on-color:#ffffff;
+  --pan:#6a5acd; --lan:#0b7a75; --man:#a8560f; --wan:#2f6fb0;
   --ok:#2e7d32; --ok-soft:#e3f2e4; --bad:#b3261e; --bad-soft:#fbe4e2;
   --display:"Bricolage Grotesque","IBM Plex Sans",system-ui,sans-serif;
   --sans:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
@@ -23,12 +23,12 @@ img{max-width:100%}
 }
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
   --bg:#0f1719; --surface:#172226; --fg:#e3ecee; --muted:#9aaeb3; --line:#2f4045;
-  --accent:#4fc3bb; --accent-soft:#16383a; --route:#f0a14f; --route-soft:#3a2a18;
+  --accent:#4fc3bb; --accent-soft:#16383a; --route:#f0a14f; --route-soft:#3a2a18; --on-color:#0f1719;
   --pan:#a99cf2; --lan:#4fc3bb; --man:#f0a14f; --wan:#78aee6;
   --ok:#7ccf80; --ok-soft:#1d3320; --bad:#f2948d; --bad-soft:#3b1f1d; color-scheme:dark}}
 :root[data-theme="dark"]{
   --bg:#0f1719; --surface:#172226; --fg:#e3ecee; --muted:#9aaeb3; --line:#2f4045;
-  --accent:#4fc3bb; --accent-soft:#16383a; --route:#f0a14f; --route-soft:#3a2a18;
+  --accent:#4fc3bb; --accent-soft:#16383a; --route:#f0a14f; --route-soft:#3a2a18; --on-color:#0f1719;
   --pan:#a99cf2; --lan:#4fc3bb; --man:#f0a14f; --wan:#78aee6;
   --ok:#7ccf80; --ok-soft:#1d3320; --bad:#f2948d; --bad-soft:#3b1f1d; color-scheme:dark}
 *{box-sizing:border-box}
@@ -37,19 +37,26 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 a{color:var(--accent)}
 :focus-visible{outline:3px solid var(--route);outline-offset:2px}
 .bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--surface);border-bottom:1px solid var(--line)}
-.bar-in{max-width:1000px;margin:0 auto;padding-block:10px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:flex;flex-wrap:wrap;align-items:center;gap:8px 16px}
+.bar-in{max-width:1200px;margin:0 auto;padding-block:10px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:flex;flex-wrap:wrap;align-items:center;gap:8px 16px}
 .brand{font-family:var(--display);font-weight:800;font-size:18px;text-decoration:none;color:var(--fg);display:flex;align-items:center;gap:8px;margin-right:auto}
 .brand svg{flex:none}
 nav.menu{display:flex;flex-wrap:wrap;gap:4px}
+@media (max-width:1180px){
+  nav.menu{order:3;width:100%;flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;padding-bottom:2px}
+  nav.menu::-webkit-scrollbar{display:none}
+  nav.menu a{white-space:nowrap;padding:5px 10px;font-size:13px}
+  .bar-in{gap:8px}
+}
 .btn,nav.menu a{font:500 14px var(--sans);border:1px solid var(--line);background:var(--surface);color:var(--fg);border-radius:6px;padding:6px 12px;text-decoration:none;cursor:pointer;display:inline-flex;align-items:center;gap:6px}
 nav.menu a[aria-current="page"]{background:var(--accent-soft);border-color:var(--accent);color:var(--fg)}
 nav.menu a .dot{width:8px;height:8px;border-radius:50%;background:var(--muted)}
-.btn.primary{background:var(--route);border-color:var(--route);color:#fff;font-weight:600}
+.btn.primary{background:var(--route);border-color:var(--route);color:var(--on-color);font-weight:600}
 .btn.ghost{background:transparent}
 main{max-width:1000px;margin:0 auto;padding-block:24px 64px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
 .crumbs{font-size:13px;color:var(--muted);display:flex;flex-wrap:wrap;gap:6px;margin-bottom:16px}
 .crumbs a{color:var(--muted)}
 h1,h2{font-family:var(--display);text-wrap:balance;line-height:1.1}
+h1:focus{outline:none}
 h1{font-size:clamp(30px,5.5vw,52px);font-weight:800;margin:0 0 12px}
 h2{font-size:24px;font-weight:600;margin:0 0 10px}
 h3{font-size:17px;margin:0 0 6px}
@@ -65,7 +72,7 @@ p{margin:0;max-width:65ch}
 .route-list{display:grid;gap:10px;margin:0;padding:0;list-style:none}
 .route-list a{display:flex;align-items:center;gap:12px;padding:12px 14px;border:1px solid var(--line);border-radius:8px;background:var(--surface);text-decoration:none;color:var(--fg)}
 .route-list a:hover{border-color:var(--accent)}
-.num{flex:none;width:28px;height:28px;border-radius:50%;background:var(--route);color:#fff;font:600 14px var(--mono);display:grid;place-items:center}
+.num{flex:none;width:28px;height:28px;border-radius:50%;background:var(--route);color:var(--on-color);font:600 14px var(--mono);display:grid;place-items:center}
 .route-list small{display:block;color:var(--muted);font-size:13px}
 .pill{font:500 11px var(--mono);letter-spacing:.04em;text-transform:uppercase;padding:2px 8px;border-radius:999px;margin-left:auto;flex:none}
 .pill.ok{background:var(--ok-soft);color:var(--ok)}
@@ -78,7 +85,7 @@ p{margin:0;max-width:65ch}
 .info{border-left:4px solid var(--accent);padding:14px 16px;background:var(--surface);border-radius:0 8px 8px 0}
 .chips{display:flex;flex-wrap:wrap;gap:6px}
 .chip{font:500 13px var(--mono);padding:4px 10px;border-radius:6px;border:2px solid;background:var(--surface);color:var(--fg);cursor:pointer}
-.chip[aria-pressed="true"]{color:#fff}
+.chip[aria-pressed="true"]{color:var(--on-color)}
 .pager{display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px;margin-top:28px;padding-top:20px;border-top:1px solid var(--line)}
 .sub-links{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
 .sub-links a{display:block;padding:14px;border:1px dashed var(--accent);border-radius:8px;text-decoration:none;color:var(--fg);background:var(--surface)}
@@ -102,6 +109,68 @@ th{font-family:var(--mono);font-size:12px;letter-spacing:.06em;text-transform:up
 .term{border-bottom:1px dotted var(--accent);cursor:help;background:none;border-top:0;border-left:0;border-right:0;padding:0;font:inherit;color:inherit}
 .note{font-size:13px;color:var(--muted)}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
+/* v2.0: secciones 2, 3 y autoevaluación */
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.devices{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:16px}
+.device{display:grid;gap:8px;align-content:start}
+.device svg{width:100%;max-width:240px;height:auto;margin:0 auto 4px;display:block}
+.device h2{margin:0}
+.palette{display:flex;flex-wrap:wrap;gap:8px}
+.dev-btn{font:600 15px var(--sans);padding:10px 16px;border-radius:8px;border:2px solid var(--line);background:var(--surface);color:var(--fg);cursor:pointer}
+.dev-btn[aria-pressed="true"]{border-color:var(--route);background:var(--route-soft)}
+.sim{display:grid;justify-items:center;gap:0;padding:20px 12px}
+.sim-node{font:600 14px var(--sans);padding:10px 16px;border-radius:999px;background:var(--bg);border:1px solid var(--line);text-align:center}
+.sim-cloud{border-color:var(--wan);color:var(--wan);background:var(--surface);padding:12px 28px}
+.sim-link{width:2px;min-height:34px;background:var(--line);position:relative;margin:2px 0}
+.sim-link.wifi{background:repeating-linear-gradient(var(--pan) 0 4px,transparent 4px 8px)}
+.sim-link span{position:absolute;left:10px;top:50%;transform:translateY(-50%);font:500 11px var(--mono);color:var(--muted);white-space:nowrap}
+.sim-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;width:100%;max-width:560px;border-top:2px solid var(--line);padding-top:10px;margin-top:-2px}
+.sim-col{display:grid;justify-items:center}
+.slot{display:grid;gap:2px;justify-items:center;min-width:150px;max-width:100%;padding:10px 12px;border-radius:10px;border:2px dashed var(--route);background:var(--route-soft);color:var(--fg);cursor:pointer;font:inherit;text-align:center}
+.slot small{font:500 11px var(--mono);color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
+.slot b{font-size:16px}
+.slot .slot-hint{font-size:12px;color:var(--muted)}
+.slot.filled{border-style:solid;background:var(--surface)}
+.slot.ok{border-color:var(--ok);background:var(--ok-soft)}
+.slot.no{border-color:var(--bad);background:var(--bad-soft)}
+.fb-item{padding:10px 14px;border-radius:8px;border:1px solid var(--line);background:var(--surface);font-size:15px}
+.fb-item.ok{border-color:var(--ok);background:var(--ok-soft)}
+.fb-item.no{border-color:var(--bad);background:var(--bad-soft)}
+.ip-big{font:600 clamp(24px,7.4vw,60px) var(--mono);display:flex;flex-wrap:nowrap;align-items:baseline;gap:2px;letter-spacing:.02em}
+.ip-big .oct{padding:2px clamp(3px,1vw,8px);border-radius:8px;border:2px solid transparent;transition:background .2s,border-color .2s}
+.ip-big .dot-sep{color:var(--muted)}
+.ip-big.hl-octetos .oct{border-color:var(--muted)}
+.ip-big.hl-red .net,.ip-big.hl-mascara .net{background:var(--accent-soft);border-color:var(--accent)}
+.ip-big.hl-equipo .host,.ip-big.hl-mascara .host{background:var(--route-soft);border-color:var(--route)}
+.addr{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px;margin:0}
+.addr div{border:1px solid var(--line);border-radius:8px;padding:10px 12px}
+.addr dt{font:500 11px var(--mono);text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
+.addr dd{margin:2px 0 0;font:600 16px var(--mono);font-variant-numeric:tabular-nums}
+.tabs{display:flex;flex-wrap:wrap;gap:4px}
+.tabs [role="tab"]{font:500 14px var(--sans);padding:8px 14px;border:1px solid var(--line);border-radius:8px 8px 0 0;background:var(--bg);color:var(--fg);cursor:pointer}
+.tabs [aria-selected="true"]{background:var(--surface);border-color:var(--accent);border-bottom-color:var(--surface);font-weight:600}
+.steps{margin:0 0 12px;padding-left:22px;display:grid;gap:6px}
+kbd{font:500 13px var(--mono);padding:1px 6px;border:1px solid var(--line);border-bottom-width:2px;border-radius:4px;background:var(--bg)}
+code{font-family:var(--mono);font-size:.92em}
+.term-out{margin:0;background:#10191c;color:#d6e4e6;border-radius:8px;padding:14px 16px;overflow-x:auto;font:500 13px/1.6 var(--mono)}
+.term-out mark{background:#f0a14f;color:#10191c;border-radius:3px;padding:0 3px}
+.field{display:grid;gap:6px}
+.field label{font-weight:600}
+input,textarea{font:500 16px var(--sans);color:var(--fg);background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:10px 12px;width:100%;max-width:420px}
+input#my-ip{font-family:var(--mono)}
+textarea{max-width:100%;resize:vertical;margin:10px 0}
+.quiz{list-style:none;margin:0;padding:0;display:grid;gap:14px;counter-reset:q}
+.q{counter-increment:q}
+.q fieldset{border:1px solid var(--line);border-radius:10px;padding:16px;margin:0;background:var(--surface);display:grid;gap:10px;min-width:0}
+.q legend{font-weight:600;padding:0 4px;max-width:100%}
+.q legend::before{content:counter(q) ". ";font-family:var(--mono);color:var(--route)}
+.q .opts{display:grid;gap:6px}
+.q .opt{display:flex;gap:10px;align-items:flex-start;padding:8px 10px;border:1px solid var(--line);border-radius:8px;cursor:pointer}
+.q .opt input{width:auto;margin-top:4px;accent-color:var(--accent)}
+.q .opt.ok{border-color:var(--ok);background:var(--ok-soft)}
+.q .opt.no{border-color:var(--bad);background:var(--bad-soft)}
+.q.done .opt{cursor:default}
+.score-box h2{margin:0}
 </style>
 </head>
 <body>
@@ -117,6 +186,7 @@ th{font-family:var(--mono);font-size:12px;letter-spacing:.06em;text-transform:up
       <a href="#red" data-nav="red"><span class="dot" style="background:var(--accent)"></span>1 · ¿Qué es una red?</a>
       <a href="#dispositivos" data-nav="dispositivos"><span class="dot"></span>2 · Dispositivos</a>
       <a href="#ip" data-nav="ip"><span class="dot"></span>3 · Direcciones IP</a>
+      <a href="#autoevaluacion" data-nav="autoevaluacion"><span class="dot"></span>4 · Autoevaluación</a>
     </nav>
     <button class="btn ghost" id="btn-gloss" type="button" aria-expanded="false" aria-controls="gloss">Glosario</button>
   </div>
@@ -170,9 +240,9 @@ th{font-family:var(--mono);font-size:12px;letter-spacing:.06em;text-transform:up
       <h2>Tu recorrido</h2>
       <ol class="route-list">
         <li><a href="#red"><span class="num">1</span><span>¿Qué es una red?<small>Tipos de red según su alcance</small></span><span class="pill ok">Disponible</span></a></li>
-        <li><a href="#dispositivos"><span class="num">2</span><span>Dispositivos de red<small>Router, switch, access point</small></span><span class="pill wip">En construcción</span></a></li>
-        <li><a href="#ip"><span class="num">3</span><span>Direcciones IP<small>IPv4, máscara, puerta de enlace</small></span><span class="pill wip">En construcción</span></a></li>
-        <li><a href="#autoevaluacion"><span class="num">4</span><span>Autoevaluación<small>Cuestionario con retroalimentación</small></span><span class="pill wip">En construcción</span></a></li>
+        <li><a href="#dispositivos"><span class="num">2</span><span>Dispositivos de red<small>Router, switch y punto de acceso</small></span><span class="pill ok">Disponible</span></a></li>
+        <li><a href="#ip"><span class="num">3</span><span>Direcciones IP<small>IPv4, máscara y puerta de enlace</small></span><span class="pill ok">Disponible</span></a></li>
+        <li><a href="#autoevaluacion"><span class="num">4</span><span>Autoevaluación<small>10 preguntas con retroalimentación</small></span><span class="pill ok">Disponible</span></a></li>
       </ol>
     </div>
   </div>
@@ -221,7 +291,7 @@ th{font-family:var(--mono);font-size:12px;letter-spacing:.06em;text-transform:up
     <h2>Para profundizar</h2>
     <div class="sub-links">
       <a href="#comparar"><b>Comparar: LAN vs WAN</b><small>Clasificá situaciones reales y recibí una devolución</small></a>
-      <a href="#video"><b>Video: cómo viaja un mensaje</b><small>En construcción</small></a>
+      <a href="#video"><b>Video: cómo viaja un mensaje</b><small>Guion listo · video en producción</small></a>
     </div>
   </div>
 
@@ -249,7 +319,7 @@ th{font-family:var(--mono);font-size:12px;letter-spacing:.06em;text-transform:up
   </div>
 
   <h2>Ponete a prueba</h2>
-  <p>Leé cada situación y elegí si se trata de una LAN o de una WAN.</p>
+  <p>Leé cada situación y elegí si se trata de una LAN o de una WAN. Después de responder vas a ver por qué es la respuesta correcta.</p>
   <div class="grid2" id="cases"></div>
   <div style="display:flex;flex-wrap:wrap;align-items:center;gap:12px"><p class="fb" id="score" aria-live="polite"></p><button class="btn" type="button" id="retry">Reintentar</button></div>
 
@@ -264,7 +334,7 @@ th{font-family:var(--mono);font-size:12px;letter-spacing:.06em;text-transform:up
   <nav class="crumbs" aria-label="Ubicación"><a href="#inicio">Inicio</a> › <a href="#red">1 · ¿Qué es una red?</a> › <span>Video</span></nav>
   <h1>Video: cómo viaja un mensaje</h1>
   <div class="wip-box">
-    <span class="eyebrow">En construcción · próxima entrega</span>
+    <span class="eyebrow">Video en producción</span>
     <p>Video corto (2 a 3 minutos) con subtítulos. Guion previsto:</p>
     <ul><li>Un estudiante manda un audio por WhatsApp desde el aula.</li><li>El audio pasa del celular al punto de acceso de la escuela (LAN).</li><li>Sale a Internet (WAN) y llega al celular de un amigo en otra ciudad.</li></ul>
   </div>
@@ -275,35 +345,231 @@ th{font-family:var(--mono);font-size:12px;letter-spacing:.06em;text-transform:up
   <nav class="crumbs" aria-label="Ubicación"><a href="#inicio">Inicio</a> › <span>2 · Dispositivos de red</span></nav>
   <span class="eyebrow">Sección 2 de 3</span>
   <h1>Dispositivos de red</h1>
-  <div class="wip-box">
-    <span class="eyebrow">En construcción · próxima entrega</span>
-    <p>Esta sección presentará el router, el switch y el punto de acceso. Incluirá:</p>
-    <ul><li><b>Galería:</b> fotos de equipos reales del laboratorio de la escuela.</li><li><b>Simulador «Armá tu red»:</b> arrastrar dispositivos para conectar un aula a Internet.</li></ul>
+  <p class="lead">Para que tu mensaje viaje, alguien tiene que recibirlo y pasarlo al siguiente tramo. En una escuela, ese trabajo lo hacen tres equipos: el <b>router</b>, el <b>switch</b> y el <b>punto de acceso</b>.</p>
+
+  <div class="devices">
+    <article class="panel device">
+      <svg viewBox="0 0 200 120" role="img" aria-label="Ilustración de un router: una caja con dos antenas, luces y una flecha que sale hacia un globo que representa Internet.">
+        <path d="M58 52V22M142 52V22" stroke="var(--route)" stroke-width="4" stroke-linecap="round"/>
+        <rect x="30" y="52" width="140" height="44" rx="10" fill="var(--route-soft)" stroke="var(--route)" stroke-width="2.5"/>
+        <circle cx="54" cy="74" r="5" fill="var(--route)"/><circle cx="72" cy="74" r="5" fill="var(--route)"/>
+        <rect x="104" y="68" width="14" height="12" rx="2" fill="var(--surface)" stroke="var(--route)"/><rect x="124" y="68" width="14" height="12" rx="2" fill="var(--surface)" stroke="var(--route)"/><rect x="144" y="68" width="14" height="12" rx="2" fill="var(--surface)" stroke="var(--route)"/>
+        <circle cx="182" cy="22" r="14" fill="none" stroke="var(--wan)" stroke-width="2"/><path d="M168 22h28M182 8c-8 9-8 19 0 28M182 8c8 9 8 19 0 28" stroke="var(--wan)" stroke-width="1.5" fill="none"/>
+        <path d="M150 30 L164 24" stroke="var(--wan)" stroke-width="2" stroke-dasharray="3 3"/>
+      </svg>
+      <h2>Router</h2>
+      <p><b>Qué hace:</b> conecta una red con otra. Es la salida de la escuela hacia Internet y decide por dónde viaja cada mensaje.</p>
+      <p class="note"><b>Comparación:</b> es como el correo de la ciudad, que recibe las cartas y elige qué camino toman para llegar a otro lugar.</p>
+    </article>
+    <article class="panel device">
+      <svg viewBox="0 0 200 120" role="img" aria-label="Ilustración de un switch: una caja ancha y baja con muchos puertos de cable, de los que salen cables hacia varias computadoras.">
+        <rect x="14" y="36" width="172" height="36" rx="6" fill="var(--accent-soft)" stroke="var(--accent)" stroke-width="2.5"/>
+        <g fill="var(--surface)" stroke="var(--accent)"><rect x="26" y="47" width="14" height="12" rx="2"/><rect x="46" y="47" width="14" height="12" rx="2"/><rect x="66" y="47" width="14" height="12" rx="2"/><rect x="86" y="47" width="14" height="12" rx="2"/><rect x="106" y="47" width="14" height="12" rx="2"/><rect x="126" y="47" width="14" height="12" rx="2"/><rect x="146" y="47" width="14" height="12" rx="2"/></g>
+        <path d="M33 72V92M53 72V92M73 72V92M93 72V92" stroke="var(--accent)" stroke-width="2"/>
+        <g fill="var(--surface)" stroke="var(--muted)" stroke-width="1.5"><rect x="24" y="92" width="18" height="14" rx="2"/><rect x="44" y="92" width="18" height="14" rx="2"/><rect x="64" y="92" width="18" height="14" rx="2"/><rect x="84" y="92" width="18" height="14" rx="2"/></g>
+        <circle cx="172" cy="53" r="3" fill="var(--ok)"/>
+      </svg>
+      <h2>Switch</h2>
+      <p><b>Qué hace:</b> une por cable muchos equipos de la misma red, como las computadoras del laboratorio, y entrega cada mensaje solo al equipo que corresponde.</p>
+      <p class="note"><b>Comparación:</b> es como el portero de un edificio, que lleva cada carta al departamento correcto sin abrirla.</p>
+    </article>
+    <article class="panel device">
+      <svg viewBox="0 0 200 120" role="img" aria-label="Ilustración de un punto de acceso: un disco plano en el techo que emite ondas de Wi-Fi hacia un celular.">
+        <rect x="70" y="14" width="60" height="6" fill="var(--line)"/>
+        <ellipse cx="100" cy="30" rx="34" ry="10" fill="var(--surface)" stroke="var(--pan)" stroke-width="2.5"/>
+        <circle cx="100" cy="30" r="3" fill="var(--pan)"/>
+        <path d="M80 56a28 28 0 0 1 40 0M72 66a40 40 0 0 1 56 0M88 46a16 16 0 0 1 24 0" stroke="var(--pan)" stroke-width="3" fill="none" stroke-linecap="round" transform="rotate(180 100 56)"/>
+        <rect x="88" y="78" width="24" height="38" rx="4" fill="var(--surface)" stroke="var(--muted)" stroke-width="2"/>
+      </svg>
+      <h2>Punto de acceso</h2>
+      <p><b>Qué hace:</b> convierte la red con cable en una red Wi-Fi, para que celulares y notebooks se conecten sin cable.</p>
+      <p class="note"><b>Comparación:</b> es como una antena de radio del aula: transmite por el aire lo que llega por el cable.</p>
+    </article>
   </div>
+
+  <div class="info">
+    <h3>¿Y en tu casa?</h3>
+    <p>El equipo que instala el proveedor de Internet hace las tres cosas en una sola caja: es router, switch y punto de acceso al mismo tiempo. En la escuela suelen estar separados porque hay muchos más equipos conectados.</p>
+  </div>
+
+  <div>
+    <h2>Para profundizar</h2>
+    <div class="sub-links">
+      <a href="#simulador"><b>Simulador: Armá tu red</b><small>Conectá el laboratorio a Internet ubicando cada equipo</small></a>
+    </div>
+  </div>
+
   <div class="pager"><a class="btn" href="#red">← Anterior: ¿Qué es una red?</a><a class="btn primary" href="#ip">Siguiente: Direcciones IP →</a></div>
+</section>
+
+<!-- ============ SUBPÁGINA: SIMULADOR ============ -->
+<section data-view="simulador" class="stack" hidden>
+  <nav class="crumbs" aria-label="Ubicación"><a href="#inicio">Inicio</a> › <a href="#dispositivos">2 · Dispositivos de red</a> › <span>Armá tu red</span></nav>
+  <span class="eyebrow">Ampliación · Sección 2</span>
+  <h1>Armá tu red</h1>
+  <p class="lead">El laboratorio tiene tres computadoras con cable y dos celulares que usan Wi-Fi. Ubicá un equipo en cada lugar vacío para que todos puedan llegar a Internet.</p>
+  <p class="note">Primero elegí un equipo, después tocá el lugar donde va. Podés cambiarlo las veces que quieras antes de probar la conexión.</p>
+
+  <div class="palette" role="group" aria-label="Equipos disponibles">
+    <button class="dev-btn" type="button" data-dev="router" aria-pressed="false">Router</button>
+    <button class="dev-btn" type="button" data-dev="switch" aria-pressed="false">Switch</button>
+    <button class="dev-btn" type="button" data-dev="ap" aria-pressed="false">Punto de acceso</button>
+  </div>
+
+  <div class="panel sim">
+    <div class="sim-node sim-cloud">Internet</div>
+    <div class="sim-link"><span>fibra del proveedor</span></div>
+    <button class="slot" type="button" data-slot="1"><small>Lugar 1</small><b>Vacío</b><span class="slot-hint">conecta la escuela con Internet</span></button>
+    <div class="sim-link"><span>cable</span></div>
+    <div class="sim-row">
+      <div class="sim-col">
+        <button class="slot" type="button" data-slot="2"><small>Lugar 2</small><b>Vacío</b><span class="slot-hint">une las PC por cable</span></button>
+        <div class="sim-link"><span>cables</span></div>
+        <div class="sim-node">3 PC del laboratorio</div>
+      </div>
+      <div class="sim-col">
+        <button class="slot" type="button" data-slot="3"><small>Lugar 3</small><b>Vacío</b><span class="slot-hint">conecta los celulares sin cable</span></button>
+        <div class="sim-link wifi"><span>Wi-Fi</span></div>
+        <div class="sim-node">2 celulares</div>
+      </div>
+    </div>
+  </div>
+
+  <div style="display:flex;flex-wrap:wrap;gap:10px"><button class="btn primary" type="button" id="sim-test">Probar la conexión</button><button class="btn" type="button" id="sim-reset">Empezar de nuevo</button></div>
+  <div id="sim-fb" class="stack" style="gap:10px" aria-live="polite"></div>
+
+  <div class="pager"><a class="btn" href="#dispositivos">← Volver a la sección</a><a class="btn primary" href="#ip">Siguiente: Direcciones IP →</a></div>
 </section>
 
 <section data-view="ip" class="stack" hidden>
   <nav class="crumbs" aria-label="Ubicación"><a href="#inicio">Inicio</a> › <span>3 · Direcciones IP</span></nav>
   <span class="eyebrow">Sección 3 de 3</span>
   <h1>Direcciones IP</h1>
-  <div class="wip-box">
-    <span class="eyebrow">En construcción · próxima entrega</span>
-    <p>Esta sección explicará IPv4, máscara y puerta de enlace. Incluirá:</p>
-    <ul><li><b>Infografía:</b> las partes de una dirección como <code>192.168.1.15</code>.</li><li><b>Práctica:</b> encontrar la IP del propio equipo con <code>ipconfig</code> (Windows) o en los ajustes del celular.</li></ul>
+  <p class="lead">Para que tu mensaje llegue al celular correcto, cada dispositivo de una red tiene una dirección, igual que cada casa tiene la suya. Esa dirección se llama <b>dirección IP</b>.</p>
+
+  <div class="panel stack" style="gap:16px">
+    <div>
+      <span class="eyebrow">Infografía · tocá cada parte</span>
+      <h2 style="margin-top:6px">La dirección de una compu del laboratorio</h2>
+    </div>
+    <div class="ip-big" aria-hidden="true"><span class="oct net">192</span><span class="dot-sep">.</span><span class="oct net">168</span><span class="dot-sep">.</span><span class="oct net">1</span><span class="dot-sep">.</span><span class="oct host">15</span></div>
+    <div class="chips" role="group" aria-label="Partes de la dirección IP">
+      <button class="chip ipchip" type="button" data-p="octetos" style="border-color:var(--muted)">Los cuatro números</button>
+      <button class="chip ipchip" type="button" data-p="red" style="border-color:var(--accent)">La red</button>
+      <button class="chip ipchip" type="button" data-p="equipo" style="border-color:var(--route)">El dispositivo</button>
+      <button class="chip ipchip" type="button" data-p="mascara" style="border-color:var(--wan)">Máscara</button>
+      <button class="chip ipchip" type="button" data-p="puerta" style="border-color:var(--pan)">Puerta de enlace</button>
+    </div>
+    <div class="info" id="ip-info" aria-live="polite">
+      <h3 id="ip-title">192.168.1.15</h3>
+      <p id="ip-body">Esta es la dirección IP de una computadora del laboratorio. Tocá cada parte para descubrir qué significa.</p>
+    </div>
+    <dl class="addr" aria-label="Datos de red de la computadora">
+      <div><dt>Dirección IP</dt><dd>192.168.1.15</dd></div>
+      <div><dt>Máscara de subred</dt><dd>255.255.255.0</dd></div>
+      <div><dt>Puerta de enlace</dt><dd>192.168.1.1</dd></div>
+    </dl>
   </div>
+
+  <div>
+    <h2>¿Están en la misma red?</h2>
+    <p>Con la máscara 255.255.255.0, dos equipos están en la misma red si sus tres primeros números coinciden. Probá con estos pares.</p>
+  </div>
+  <div class="grid2" id="pairs"></div>
+
+  <div>
+    <h2>Para profundizar</h2>
+    <div class="sub-links">
+      <a href="#practica"><b>Práctica: encontrá tu IP</b><small>En la compu o en el celular, y analizala acá mismo</small></a>
+    </div>
+  </div>
+
   <div class="pager"><a class="btn" href="#dispositivos">← Anterior: Dispositivos</a><a class="btn primary" href="#autoevaluacion">Ir a la autoevaluación →</a></div>
 </section>
 
-<section data-view="autoevaluacion" class="stack" hidden>
-  <nav class="crumbs" aria-label="Ubicación"><a href="#inicio">Inicio</a> › <span>Autoevaluación</span></nav>
-  <h1>Autoevaluación</h1>
-  <div class="wip-box">
-    <span class="eyebrow">En construcción · próxima entrega</span>
-    <p>Cuestionario de 8 a 10 preguntas sobre las tres secciones, con devolución inmediata en cada respuesta y opción de reintentar.</p>
+<!-- ============ SUBPÁGINA: PRÁCTICA ============ -->
+<section data-view="practica" class="stack" hidden>
+  <nav class="crumbs" aria-label="Ubicación"><a href="#inicio">Inicio</a> › <a href="#ip">3 · Direcciones IP</a> › <span>Encontrá tu IP</span></nav>
+  <span class="eyebrow">Ampliación · Sección 3</span>
+  <h1>Encontrá tu IP</h1>
+  <p class="lead">Tu compu o tu celular también tienen una dirección IP. Buscala con los pasos de tu dispositivo y después analizala abajo.</p>
+
+  <div class="tabs" role="tablist" aria-label="Elegí tu dispositivo">
+    <button role="tab" type="button" id="tab-win" aria-controls="pan-win" aria-selected="true">Windows</button>
+    <button role="tab" type="button" id="tab-and" aria-controls="pan-and" aria-selected="false" tabindex="-1">Android</button>
+    <button role="tab" type="button" id="tab-ios" aria-controls="pan-ios" aria-selected="false" tabindex="-1">iPhone</button>
   </div>
+  <div class="panel" role="tabpanel" id="pan-win" aria-labelledby="tab-win">
+    <ol class="steps">
+      <li>Apretá las teclas <kbd>Windows</kbd> + <kbd>R</kbd>, escribí <code>cmd</code> y apretá <kbd>Enter</kbd>.</li>
+      <li>En la ventana negra escribí <code>ipconfig</code> y apretá <kbd>Enter</kbd>.</li>
+      <li>Buscá el bloque de tu conexión (Wi-Fi o Ethernet) y estas tres líneas:</li>
+    </ol>
+    <pre class="term-out" aria-label="Ejemplo de resultado de ipconfig">Adaptador de LAN inalámbrica Wi-Fi:
+
+   Dirección IPv4. . . . . . . . . . . . . . : <mark>192.168.1.15</mark>
+   Máscara de subred . . . . . . . . . . . . : <mark>255.255.255.0</mark>
+   Puerta de enlace predeterminada . . . . . : <mark>192.168.1.1</mark></pre>
+  </div>
+  <div class="panel" role="tabpanel" id="pan-and" aria-labelledby="tab-and" hidden>
+    <ol class="steps">
+      <li>Abrí <b>Ajustes</b> y entrá en <b>Wi-Fi</b> (o <b>Conexiones › Wi-Fi</b>).</li>
+      <li>Tocá el engranaje o el nombre de la red a la que estás conectado.</li>
+      <li>Buscá <b>Dirección IP</b>. En algunos modelos está dentro de <b>Avanzado</b> o <b>Ver más</b>.</li>
+    </ol>
+    <p class="note">Los nombres cambian según la marca del celular, pero siempre está dentro de los datos de la red Wi-Fi.</p>
+  </div>
+  <div class="panel" role="tabpanel" id="pan-ios" aria-labelledby="tab-ios" hidden>
+    <ol class="steps">
+      <li>Abrí <b>Configuración</b> y entrá en <b>Wi-Fi</b>.</li>
+      <li>Tocá la <b>ⓘ</b> que está al lado de la red a la que estás conectado.</li>
+      <li>En <b>Dirección IPv4</b> vas a ver la <b>Dirección IP</b>, la <b>Máscara de subred</b> y el <b>Router</b> (la puerta de enlace).</li>
+    </ol>
+  </div>
+
+  <form class="panel stack" id="ip-form" style="gap:12px" novalidate>
+    <h2>Analizá tu dirección</h2>
+    <p class="note">Lo que escribas se analiza en esta página y no se guarda ni se envía a ningún lado.</p>
+    <div class="field">
+      <label for="my-ip">Tu dirección IP</label>
+      <input id="my-ip" inputmode="decimal" autocomplete="off" placeholder="por ejemplo, 192.168.1.15" spellcheck="false">
+    </div>
+    <div><button class="btn primary" type="submit">Analizar</button></div>
+    <div id="ip-result" aria-live="polite"></div>
+  </form>
+
+  <div class="pager"><a class="btn" href="#ip">← Volver a la sección</a><a class="btn primary" href="#autoevaluacion">Ir a la autoevaluación →</a></div>
+</section>
+
+<section data-view="autoevaluacion" class="stack" hidden>
+  <nav class="crumbs" aria-label="Ubicación"><a href="#inicio">Inicio</a> › <span>4 · Autoevaluación</span></nav>
+  <span class="eyebrow">Cierre del recorrido</span>
+  <h1>Autoevaluación</h1>
+  <p class="lead">Diez preguntas sobre las tres secciones. En cada una vas a ver si acertaste y por qué. No es una nota: sirve para que sepas qué repasar.</p>
+
+  <ol class="quiz" id="quiz"></ol>
+  <div class="panel score-box" id="quiz-score" hidden aria-live="polite">
+    <h2 id="qs-title"></h2>
+    <p id="qs-body"></p>
+    <div style="display:flex;flex-wrap:wrap;gap:10px;margin-top:12px"><button class="btn" type="button" id="quiz-retry">Reintentar</button></div>
+  </div>
+
+  <div class="info" style="border-left-color:var(--route)">
+    <span class="eyebrow">Volvé a la pregunta guía</span>
+    <h3 style="margin-top:6px">¿Cómo llega un mensaje de tu celular al de un amigo?</h3>
+    <p>Escribí tu respuesta con lo que aprendiste: tipos de red, equipos y direcciones. Después comparala con una respuesta posible.</p>
+    <label for="guia-resp" class="sr-only">Tu respuesta a la pregunta guía</label>
+    <textarea id="guia-resp" rows="5" placeholder="Mi audio sale del celular…"></textarea>
+    <div><button class="btn" type="button" id="guia-ver" aria-expanded="false" aria-controls="guia-modelo">Ver una respuesta posible</button></div>
+    <div id="guia-modelo" hidden>
+      <p><b>Una respuesta posible:</b> el audio sale de mi celular por Wi-Fi hacia el <b>punto de acceso</b> del aula. De ahí pasa por cable al <b>switch</b> y llega al <b>router</b> de la escuela: hasta ahí viajó por la <b>LAN</b>. El router lo envía a Internet, la <b>WAN</b>, donde otros routers eligen el camino hasta la casa de mi amigo. Allí entra por su router y llega a su celular, que tiene su propia <b>dirección IP</b>, igual que el mío. Así el mensaje sabe de dónde sale y a quién tiene que llegar.</p>
+      <p class="note">Si tu respuesta nombra al menos los equipos y el paso de LAN a WAN, vas por buen camino.</p>
+    </div>
+  </div>
+
   <div class="pager"><a class="btn" href="#ip">← Volver a Direcciones IP</a><a class="btn ghost" href="#inicio">Volver al inicio</a></div>
 </section>
+
 
 </main>
 
@@ -319,14 +585,20 @@ th{font-family:var(--mono);font-size:12px;letter-spacing:.06em;text-transform:up
     <dt>Router</dt><dd>Equipo que conecta una red con otra, por ejemplo la red de tu casa con Internet.</dd>
     <dt>Switch</dt><dd>Equipo que conecta por cable varios dispositivos de una misma LAN.</dd>
     <dt>Punto de acceso</dt><dd>Equipo que permite conectarse a una red por Wi-Fi.</dd>
-    <dt>Dirección IP</dt><dd>Número que identifica a cada dispositivo dentro de una red.</dd>
+    <dt>Dirección IP</dt><dd>Número que identifica a cada dispositivo dentro de una red, por ejemplo 192.168.1.15.</dd>
+    <dt>Octeto</dt><dd>Cada uno de los cuatro números de una dirección IPv4. Va de 0 a 255.</dd>
+    <dt>Máscara de subred</dt><dd>Indica qué parte de la dirección IP corresponde a la red y qué parte al dispositivo, por ejemplo 255.255.255.0.</dd>
+    <dt>Puerta de enlace</dt><dd>Dirección del router. Por ahí salen los mensajes que van a otra red.</dd>
+    <dt>IP privada</dt><dd>Dirección que funciona solo dentro de una red local, como 192.168.x.x o 10.x.x.x.</dd>
+    <dt>Wi-Fi</dt><dd>Forma de conectarse a una red sin cable, por ondas de radio.</dd>
+    <dt>Cable UTP</dt><dd>Cable de red con cuatro pares de hilos trenzados. Es el que se usa para conectar computadoras al switch.</dd>
   </dl>
 </aside>
 
 <script>
 (function(){
-  var VIEWS=["inicio","red","comparar","video","dispositivos","ip","autoevaluacion"];
-  var NAV={inicio:"inicio",red:"red",comparar:"red",video:"red",dispositivos:"dispositivos",ip:"ip",autoevaluacion:"inicio"};
+  var VIEWS=["inicio","red","comparar","video","dispositivos","simulador","ip","practica","autoevaluacion"];
+  var NAV={inicio:"inicio",red:"red",comparar:"red",video:"red",dispositivos:"dispositivos",simulador:"dispositivos",ip:"ip",practica:"ip",autoevaluacion:"autoevaluacion"};
   function show(){
     var v=(location.hash||"").slice(1); if(VIEWS.indexOf(v)<0) v="inicio";
     document.querySelectorAll("[data-view]").forEach(function(s){s.hidden=s.dataset.view!==v});
@@ -334,12 +606,21 @@ th{font-family:var(--mono);font-size:12px;letter-spacing:.06em;text-transform:up
       if(a.dataset.nav===NAV[v]) a.setAttribute("aria-current","page"); else a.removeAttribute("aria-current");
     });
     window.scrollTo(0,0);
+    var h=document.querySelector('[data-view="'+v+'"] h1');
+    if(h){ document.title=(v==="inicio"?"":h.textContent+" · ")+"Redes informáticas";
+      if(!first){ h.setAttribute("tabindex","-1"); h.focus({preventScroll:true}); } }
+    first=false;
   }
+  var first=true;
   window.addEventListener("hashchange",show); show();
+
+  // Movimiento reducido: detiene la animación de la portada
+  try{ if(window.matchMedia("(prefers-reduced-motion: reduce)").matches)
+    document.querySelectorAll("svg").forEach(function(sv){ if(sv.pauseAnimations) sv.pauseAnimations(); }); }catch(e){}
 
   // Glosario
   var g=document.getElementById("gloss"), gb=document.getElementById("btn-gloss");
-  function setG(open){g.hidden=!open; gb.setAttribute("aria-expanded",open)}
+  function setG(open){g.hidden=!open; gb.setAttribute("aria-expanded",open); if(open) document.getElementById("gloss-close").focus()}
   gb.onclick=function(){setG(g.hidden)};
   document.getElementById("gloss-close").onclick=function(){setG(false);gb.focus()};
   document.querySelectorAll("[data-open-gloss]").forEach(function(b){b.onclick=function(){setG(true)}});
@@ -356,11 +637,11 @@ th{font-family:var(--mono);font-size:12px;letter-spacing:.06em;text-transform:up
     document.getElementById("ri-title").textContent=INFO[k][0];
     document.getElementById("ri-body").textContent=INFO[k][1];
     document.getElementById("ring-info").style.borderLeftColor="var(--"+k+")";
-    document.querySelectorAll(".chip").forEach(function(c){
+    document.querySelectorAll(".chip[data-k]").forEach(function(c){
       var on=c.dataset.k===k; c.setAttribute("aria-pressed",on); c.style.background=on?"var(--"+k+")":"";
     });
   }
-  document.querySelectorAll(".ring,.chip").forEach(function(el){
+  document.querySelectorAll(".ring,.chip[data-k]").forEach(function(el){
     el.addEventListener("click",function(){pick(el.dataset.k)});
     el.addEventListener("keydown",function(e){if(e.key==="Enter"||e.key===" "){e.preventDefault();pick(el.dataset.k)}});
   });
@@ -390,6 +671,143 @@ th{font-family:var(--mono);font-size:12px;letter-spacing:.06em;text-transform:up
   });
   }
   build(); document.getElementById("retry").onclick=build;
+
+  // ===== v2.0 · Simulador «Armá tu red» =====
+  var DEV={router:"Router",switch:"Switch",ap:"Punto de acceso"};
+  var RIGHT={1:"router",2:"switch",3:"ap"};
+  var WHY={
+    "1router":"El router conecta la red de la escuela con otra red: Internet. Es la salida.",
+    "1switch":"El switch une equipos dentro de la misma red, pero no sabe enviar los mensajes hacia otra red como Internet. Para salir hace falta un router.",
+    "1ap":"El punto de acceso da Wi-Fi, pero no conecta la escuela con Internet. Necesita un router delante.",
+    "2switch":"El switch une por cable las PC del laboratorio y le entrega cada mensaje a la que corresponde.",
+    "2router":"Acá hay que conectar muchas PC por cable dentro del mismo laboratorio. Ese es el trabajo del switch; el router ya está en la salida.",
+    "2ap":"Las PC del laboratorio están conectadas por cable, y el punto de acceso conecta sin cable. Acá va el switch.",
+    "3ap":"El punto de acceso convierte la red con cable en Wi-Fi, y así se conectan los celulares.",
+    "3router":"Los celulares no tienen cable: necesitan un equipo que emita Wi-Fi. Ese es el punto de acceso.",
+    "3switch":"El switch solo conecta por cable, y los celulares necesitan Wi-Fi. Acá va el punto de acceso."
+  };
+  var chosen=null, placed={};
+  var devBtns=document.querySelectorAll(".dev-btn"), slots=document.querySelectorAll(".slot"), simFb=document.getElementById("sim-fb");
+  devBtns.forEach(function(b){ b.addEventListener("click",function(){
+    chosen=b.dataset.dev; devBtns.forEach(function(x){x.setAttribute("aria-pressed",x===b)}); }); });
+  function paintSlot(s){
+    var d=placed[s.dataset.slot]; s.classList.remove("ok","no");
+    s.querySelector("b").textContent=d?DEV[d]:"Vacío"; s.classList.toggle("filled",!!d);
+    s.setAttribute("aria-label",s.querySelector("small").textContent+": "+(d?DEV[d]:"vacío")+", "+s.querySelector(".slot-hint").textContent);
+  }
+  slots.forEach(function(s){ paintSlot(s); s.addEventListener("click",function(){
+    if(!chosen){ simFb.innerHTML='<p class="fb-item">Primero elegí un equipo de la lista de arriba.</p>'; return; }
+    placed[s.dataset.slot]=chosen; simFb.innerHTML=""; paintSlot(s); }); });
+  document.getElementById("sim-test").addEventListener("click",function(){
+    var html="", ok=0, n=0;
+    [1,2,3].forEach(function(k){
+      var s=document.querySelector('.slot[data-slot="'+k+'"]'), d=placed[k]; paintSlot(s);
+      if(!d){ html+='<p class="fb-item no"><b>Lugar '+k+':</b> todavía está vacío.</p>'; return; }
+      n++; var good=d===RIGHT[k]; if(good) ok++;
+      s.classList.add(good?"ok":"no");
+      html+='<p class="fb-item '+(good?"ok":"no")+'"><b>Lugar '+k+' · '+DEV[d]+(good?" ✓":" ✗")+'</b><br>'+WHY[k+d]+'</p>';
+    });
+    if(ok===3) html='<p class="fb-item ok"><b>¡La red funciona!</b> Las PC llegan a Internet por cable a través del switch y del router, y los celulares por Wi-Fi a través del punto de acceso. Es el mismo camino que hace tu mensaje en la escuela.</p>'+html;
+    else if(n===3) html='<p class="fb-item no"><b>La red todavía no funciona.</b> Leé qué hace cada equipo y cambiá los que están en rojo.</p>'+html;
+    simFb.innerHTML=html;
+  });
+  document.getElementById("sim-reset").addEventListener("click",function(){
+    placed={}; chosen=null; devBtns.forEach(function(x){x.setAttribute("aria-pressed","false")});
+    slots.forEach(paintSlot); simFb.innerHTML=""; });
+
+  // ===== v2.0 · Infografía IP =====
+  var IPI={
+    octetos:["Cuatro números separados por puntos","Una dirección IPv4 tiene cuatro números, llamados octetos. Cada uno va de 0 a 255. Por eso 192.168.1.300 no es una dirección válida."],
+    red:["192.168.1 · la red","Los tres primeros números identifican la red del laboratorio. Todas las compus de esa red empiezan igual, como las casas de una misma calle."],
+    equipo:["15 · el dispositivo","El último número identifica a esta compu dentro de la red, como el número de una casa en la calle. Otra compu del laboratorio podría ser la 192.168.1.16."],
+    mascara:["255.255.255.0 · la máscara de subred","La máscara indica qué parte de la dirección es la red y qué parte es el dispositivo. Cada 255 marca un número de la red y el 0 marca el del dispositivo."],
+    puerta:["192.168.1.1 · la puerta de enlace","Es la dirección del router. Cuando un mensaje va a otra red, por ejemplo a Internet, la compu se lo entrega a la puerta de enlace."]
+  };
+  var ipBig=document.querySelector(".ip-big");
+  document.querySelectorAll(".ipchip").forEach(function(c){ c.addEventListener("click",function(){
+    var k=c.dataset.p; document.getElementById("ip-title").textContent=IPI[k][0]; document.getElementById("ip-body").textContent=IPI[k][1];
+    ipBig.className="ip-big hl-"+k;
+    document.querySelectorAll(".ipchip").forEach(function(x){ var on=x===c; x.setAttribute("aria-pressed",on);
+      x.style.background=on?x.style.borderColor:""; }); }); });
+
+  var PAIRS=[["192.168.1.15","192.168.1.40",true,"Los tres primeros números coinciden (192.168.1): están en la misma red y se comunican a través del switch."],
+             ["192.168.1.15","192.168.2.15",false,"El tercer número cambia (1 y 2): son redes distintas. Para comunicarse necesitan pasar por un router."],
+             ["10.0.0.8","10.0.0.25",true,"Coinciden 10.0.0: misma red, aunque los números sean distintos de los del laboratorio."]];
+  var pw=document.getElementById("pairs");
+  PAIRS.forEach(function(p,i){
+    var d=document.createElement("div"); d.className="case";
+    d.innerHTML='<p><code>'+p[0]+'</code> y <code>'+p[1]+'</code></p><div class="opts"><button class="btn" type="button" id="pr'+i+'s">Misma red</button><button class="btn" type="button" id="pr'+i+'n">Redes distintas</button></div><p class="fb" aria-live="polite"></p>';
+    pw.appendChild(d);
+    d.querySelectorAll("button").forEach(function(b){ b.onclick=function(){
+      var said=b.id.slice(-1)==="s", ok=said===p[2];
+      d.classList.remove("right","wrong"); d.classList.add(ok?"right":"wrong");
+      d.querySelector(".fb").textContent=(ok?"¡Bien! ":"Revisalo. ")+p[3]; }; });
+  });
+
+  // ===== v2.0 · Pestañas y analizador de IP =====
+  var tabs=document.querySelectorAll('.tabs [role="tab"]');
+  function selTab(t){ tabs.forEach(function(x){ var on=x===t; x.setAttribute("aria-selected",on); x.tabIndex=on?0:-1;
+    document.getElementById(x.getAttribute("aria-controls")).hidden=!on; }); }
+  tabs.forEach(function(t,i){ t.addEventListener("click",function(){selTab(t)});
+    t.addEventListener("keydown",function(e){ var j=e.key==="ArrowRight"?i+1:e.key==="ArrowLeft"?i-1:null;
+      if(j===null) return; e.preventDefault(); var n=tabs[(j+tabs.length)%tabs.length]; selTab(n); n.focus(); }); });
+  document.getElementById("ip-form").addEventListener("submit",function(e){
+    e.preventDefault(); var out=document.getElementById("ip-result"), v=document.getElementById("my-ip").value.trim().replace(/,/g,".");
+    var p=v.split("."), valid=p.length===4 && p.every(function(x){return /^\d{1,3}$/.test(x) && +x<=255});
+    if(!valid){ out.innerHTML='<p class="fb-item no">«'+v.replace(/[<>&"]/g,"")+'» no es una dirección IPv4 válida. Tiene que tener cuatro números de 0 a 255 separados por puntos, por ejemplo 192.168.1.15.</p>'; return; }
+    var a=+p[0], b=+p[1], priv=a===10||(a===172&&b>=16&&b<=31)||(a===192&&b===168), apipa=a===169&&b===254;
+    var html='<p class="fb-item ok"><b>Es una dirección válida.</b> Si tu máscara es 255.255.255.0 (la más común en casas y escuelas), tu red es <code>'+p.slice(0,3).join(".")+'</code> y tu dispositivo es el número <code>'+p[3]+'</code>.</p>';
+    if(priv) html+='<p class="fb-item">Es una <b>dirección privada</b>: funciona dentro de tu red local, como la de tu casa o la escuela. Hacia Internet salís con otra dirección, la <b>IP pública</b> del router.</p>';
+    else if(apipa) html+='<p class="fb-item no">Empieza con 169.254: tu equipo no consiguió dirección del router. Suele pasar cuando la conexión falla. Revisá el cable o el Wi-Fi.</p>';
+    else html+='<p class="fb-item">No es de los rangos privados más comunes (192.168…, 10…, 172.16 a 172.31…). Puede ser una <b>dirección pública</b> o la red de tu proveedor de datos móviles.</p>';
+    out.innerHTML=html;
+  });
+
+  // ===== v2.0 · Autoevaluación =====
+  var QZ=[
+    ["Tus auriculares Bluetooth conectados a tu celular forman una red…",["PAN","LAN","MAN","WAN"],0,"Es una red personal: une dispositivos de una sola persona a pocos metros."],
+    ["Una red que une todas las escuelas de una ciudad es una…",["LAN","MAN","PAN","WAN"],1,"Abarca varios edificios dentro de una ciudad: es una red metropolitana."],
+    ["¿Qué equipo conecta la red de la escuela con Internet?",["El switch","El punto de acceso","El router","La computadora del docente"],2,"El router conecta una red con otra. Es la salida de la escuela hacia Internet."],
+    ["En el laboratorio hay 20 PC conectadas por cable. ¿Qué equipo las une?",["El router","El switch","El punto de acceso","El módem"],1,"El switch une por cable muchos equipos de la misma red."],
+    ["Querés conectar tu celular a la red de la escuela sin cable. ¿Qué equipo lo permite?",["El switch","El punto de acceso","Un cable UTP","La puerta de enlace"],1,"El punto de acceso convierte la red con cable en Wi-Fi."],
+    ["¿Cuál de estas es una dirección IPv4 válida?",["192.168.1.300","192.168.1","192.168.1.30","192,168,1,30"],2,"Tiene cuatro números de 0 a 255 separados por puntos. 300 es mayor que 255, y a 192.168.1 le falta un número."],
+    ["Con la máscara 255.255.255.0, ¿qué parte de 192.168.1.15 identifica al dispositivo?",["192","192.168","192.168.1","15"],3,"Los tres primeros números son la red y el último es el dispositivo."],
+    ["¿Para qué sirve la puerta de enlace?",["Para darle Wi-Fi al celular","Para enviar los mensajes que van a otra red","Para guardar las direcciones IP","Para proteger la red de virus"],1,"Es la dirección del router: por ahí salen los mensajes que van a otra red, como Internet."],
+    ["Con la máscara 255.255.255.0, ¿192.168.1.15 y 192.168.2.15 están en la misma red?",["Sí, porque terminan igual","No, porque cambia el tercer número","Sí, porque empiezan con 192.168","No se puede saber"],1,"Para estar en la misma red tienen que coincidir los tres primeros números, y acá el tercero cambia."],
+    ["Mandás un audio por Wi-Fi a un amigo de otra ciudad. ¿Qué camino hace?",["Celular → router → punto de acceso → Internet → celular","Celular → punto de acceso → switch → router → Internet → … → celular de tu amigo","Celular → Internet → celular de tu amigo, sin pasar por equipos","Celular → switch → celular de tu amigo"],1,"Sale por Wi-Fi al punto de acceso, pasa por la LAN de la escuela (switch y router) y viaja por Internet hasta la red de tu amigo."]
+  ];
+  var qList=document.getElementById("quiz"), qDone=0, qOk=0;
+  function buildQuiz(){
+    qList.innerHTML=""; qDone=0; qOk=0; document.getElementById("quiz-score").hidden=true;
+    QZ.forEach(function(q,i){
+      var li=document.createElement("li"); li.className="q";
+      var h='<fieldset><legend>'+q[0]+'</legend><div class="opts">';
+      q[1].forEach(function(o,j){ h+='<label class="opt" for="q'+i+'o'+j+'"><input type="radio" name="q'+i+'" id="q'+i+'o'+j+'" value="'+j+'"><span>'+o+'</span></label>'; });
+      h+='</div><p class="fb" aria-live="polite"></p></fieldset>'; li.innerHTML=h; qList.appendChild(li);
+      li.querySelectorAll("input").forEach(function(inp){ inp.addEventListener("change",function(){
+        if(li.classList.contains("done")) return; li.classList.add("done"); qDone++;
+        var j=+inp.value, ok=j===q[2]; if(ok) qOk++;
+        inp.closest(".opt").classList.add(ok?"ok":"no");
+        if(!ok) li.querySelector("#q"+i+"o"+q[2]).closest(".opt").classList.add("ok");
+        li.querySelectorAll("input").forEach(function(x){x.disabled=true});
+        li.querySelector(".fb").textContent=(ok?"¡Correcto! ":"La respuesta es: "+q[1][q[2]]+". ")+q[3];
+        if(qDone===QZ.length) showScore();
+      }); });
+    });
+  }
+  function showScore(){
+    var box=document.getElementById("quiz-score"); box.hidden=false;
+    document.getElementById("qs-title").textContent="Respondiste bien "+qOk+" de "+QZ.length;
+    var msg = qOk>=9 ? "¡Muy bien! Comprendiste los tipos de red, los equipos y las direcciones. Ahora volvé a la pregunta guía y completá tu respuesta."
+            : qOk>=6 ? "Vas bien. Revisá las explicaciones de las preguntas en rojo y, si hace falta, volvé a la sección que corresponde: 1 a 2 son de tipos de red, 3 a 5 de equipos y 6 a 9 de direcciones IP."
+            : "Te conviene repasar antes de seguir. Volvé a las secciones 1, 2 y 3, probá el simulador y después reintentá.";
+    document.getElementById("qs-body").textContent=msg;
+  }
+  buildQuiz(); document.getElementById("quiz-retry").onclick=function(){ buildQuiz(); qList.querySelector("input").focus(); };
+  document.getElementById("guia-ver").addEventListener("click",function(){
+    var m=document.getElementById("guia-modelo"); m.hidden=!m.hidden; this.setAttribute("aria-expanded",!m.hidden);
+    this.textContent=m.hidden?"Ver una respuesta posible":"Ocultar la respuesta posible"; });
+
 })();
 </script>
 
